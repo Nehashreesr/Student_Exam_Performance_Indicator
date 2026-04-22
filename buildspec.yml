@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 335227442734.dkr.ecr.eu-north-1.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - docker build -t simple-docker-app .
+      - docker tag simple-docker-app:latest 335227442734.dkr.ecr.eu-north-1.amazonaws.com/simple-docker-app:latest
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push 335227442734.dkr.ecr.eu-north-1.amazonaws.com/simple-docker-app:latest
